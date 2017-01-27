@@ -11,18 +11,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.example.davit.poems.data.DbHelper;
-
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
-
-import static com.example.davit.poems.data.PoemsAppContract.PoetsEntry.COLUMN_NAME;
-import static com.example.davit.poems.data.PoemsAppContract.PoetsEntry.TABLE_NAME;
 
 public class AuthorsActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
-    private static final String TAG = "AuthorsActivity";
+    private static final String TAG = AuthorsActivity.class.getSimpleName();
     private RecyclerView mRecyclerView;
-    private DbHelper mDbHelper = new DbHelper(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,24 +33,17 @@ public class AuthorsActivity extends AppCompatActivity implements SearchView.OnQ
                 mRecyclerView.getContext(),
                 layoutManager.getOrientation()));
 
-        // Парсим и пишем в бд, данные про поэтов
-        AuthorParserTask authorParserTask = new AuthorParserTask(mDbHelper);
-        authorParserTask.execute();
+        HashMap<String, String> map = new HashMap<>();
 
         try {
-            PoetsAdapter adapter = new PoetsAdapter(mDbHelper, new Object[]{
-                    TABLE_NAME,
-                    new String[]{COLUMN_NAME},
-                    null,
-                    null,
-                    null,
-                    null,
-                    null
-            });
-            mRecyclerView.setAdapter(adapter);
-        } catch (ExecutionException | InterruptedException e) {
+            map = new AuthorParserTask().execute().get();
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+        ArrayList<String> list = new ArrayList<>();
+        list.addAll(map.keySet());
+        PoetsAdapter adapter = new PoetsAdapter(list);
+        mRecyclerView.setAdapter(adapter);
     }
 
     @Override
