@@ -2,11 +2,8 @@ package com.example.davit.poems;
 
 import android.database.Cursor;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.example.davit.poems.data.DbHelper;
-
-import static com.example.davit.poems.data.PoemsAppContract.PoetsEntry.COLUMN_NAME;
 
 public class GetCursorTask extends AsyncTask<Object, Void, Cursor> {
 
@@ -29,7 +26,6 @@ public class GetCursorTask extends AsyncTask<Object, Void, Cursor> {
                 (String) params[6] // order by
         );
 
-        Log.d(TAG, "doInBackground: " + c.getColumnName(c.getColumnIndex(COLUMN_NAME)));
         return c;
     }
 }
