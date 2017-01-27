@@ -22,7 +22,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String SQL_CREATE_POETS_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
                 _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_NAME + " TEXT NOT NULL" +
+                COLUMN_NAME + " TEXT NOT NULL, " +
                 COLUMN_LINK + " TEXT NOT NULL);";
         db.execSQL(SQL_CREATE_POETS_TABLE);
     }
