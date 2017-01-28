@@ -18,6 +18,7 @@ import java.util.concurrent.ExecutionException;
 public class AuthorsActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     private static final String TAG = AuthorsActivity.class.getSimpleName();
+    PoetsAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
     @Override
@@ -42,8 +43,8 @@ public class AuthorsActivity extends AppCompatActivity implements SearchView.OnQ
         }
         ArrayList<String> list = new ArrayList<>();
         list.addAll(map.keySet());
-        PoetsAdapter adapter = new PoetsAdapter(list);
-        mRecyclerView.setAdapter(adapter);
+        mAdapter = new PoetsAdapter(list);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -60,11 +61,15 @@ public class AuthorsActivity extends AppCompatActivity implements SearchView.OnQ
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        return false;
+        mAdapter.getFilter().filter(query);
+
+        return true;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        return false;
+        mAdapter.getFilter().filter(newText);
+
+        return true;
     }
 }

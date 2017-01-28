@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Русская классика</string>
     <string name="data_uploaded">Данные загружены</string>
+    <string name="search_title">Поиск</string>
 </resources>
