@@ -16,10 +16,12 @@ class PoetsAdapter extends RecyclerView.Adapter<PoetsAdapter.ViewHolder> impleme
     private ArrayList<String> poetsNames;
     private ArrayList<String> filteredList;
     private PoetsFilter poetsFilter;
+    private RecyclerItemClickListener listener;
 
-    public PoetsAdapter(ArrayList<String> poetsNames) {
+    public PoetsAdapter(ArrayList<String> poetsNames, RecyclerItemClickListener listener) {
         this.poetsNames = poetsNames;
         this.filteredList = poetsNames;
+        this.listener = listener;
 
         getFilter();
     }
@@ -27,7 +29,13 @@ class PoetsAdapter extends RecyclerView.Adapter<PoetsAdapter.ViewHolder> impleme
     @Override
     public PoetsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item, parent, false);
-        ViewHolder viewHolder = new ViewHolder(v);
+        final ViewHolder viewHolder = new ViewHolder(v);
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onItemClick(v, viewHolder.getAdapterPosition());
+            }
+        });
 
         return viewHolder;
     }
@@ -50,68 +58,6 @@ class PoetsAdapter extends RecyclerView.Adapter<PoetsAdapter.ViewHolder> impleme
         return poetsFilter;
     }
 
-    private class PoetsFilter extends Filter {
-
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            FilterResults results = new FilterResults();
-
-            if (constraint != null && constraint.length() > 0) {
-                ArrayList<String> tempList = new ArrayList<>();
-
-                for (String poet : poetsNames) {
-                    if (poet.toLowerCase().contains(constraint.toString().toLowerCase()))
-                        tempList.add(poet);
-                }
-
-                results.values = tempList;
-                results.count = tempList.size();
-            } else {
-                results.values = poetsNames;
-                results.count = poetsNames.size();
-            }
-
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            filteredList = (ArrayList<String>) results.values;
-            notifyDataSetChanged();
-        }
-    }
-
-    private class PoetsFilter extends Filter {
-
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            FilterResults results = new FilterResults();
-
-            if (constraint != null && constraint.length() > 0) {
-                ArrayList<String> tempList = new ArrayList<>();
-
-                for (String poet : poetsNames) {
-                    if (poet.toLowerCase().contains(constraint.toString().toLowerCase()))
-                        tempList.add(poet);
-                }
-
-                results.values = tempList;
-                results.count = tempList.size();
-            } else {
-                results.values = poetsNames;
-                results.count = poetsNames.size();
-            }
-
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            filteredList = (ArrayList<String>) results.values;
-            notifyDataSetChanged();
-        }
-    }
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView text1;
@@ -119,6 +65,37 @@ class PoetsAdapter extends RecyclerView.Adapter<PoetsAdapter.ViewHolder> impleme
         public ViewHolder(View itemView) {
             super(itemView);
             text1 = (TextView) itemView.findViewById(R.id.text1);
+        }
+    }
+
+    private class PoetsFilter extends Filter {
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults results = new FilterResults();
+
+            if (constraint != null && constraint.length() > 0) {
+                ArrayList<String> tempList = new ArrayList<>();
+
+                for (String poet : poetsNames) {
+                    if (poet.toLowerCase().contains(constraint.toString().toLowerCase()))
+                        tempList.add(poet);
+                }
+
+                results.values = tempList;
+                results.count = tempList.size();
+            } else {
+                results.values = poetsNames;
+                results.count = poetsNames.size();
+            }
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            filteredList = (ArrayList<String>) results.values;
+            notifyDataSetChanged();
         }
     }
 }

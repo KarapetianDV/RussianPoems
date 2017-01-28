@@ -10,6 +10,8 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +45,12 @@ public class AuthorsActivity extends AppCompatActivity implements SearchView.OnQ
         }
         ArrayList<String> list = new ArrayList<>();
         list.addAll(map.keySet());
-        mAdapter = new PoetsAdapter(list);
+        mAdapter = new PoetsAdapter(list, new RecyclerItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                Toast.makeText(AuthorsActivity.this, "OnClick", Toast.LENGTH_SHORT).show();
+            }
+        });
         mRecyclerView.setAdapter(mAdapter);
     }
 
