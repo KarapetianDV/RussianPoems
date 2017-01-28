@@ -1,5 +1,6 @@
 package com.example.davit.poems;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -19,6 +21,8 @@ import java.util.concurrent.ExecutionException;
 
 public class AuthorsActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
+    public static final String AUTHOR_INTENT_URL_TAG = "AUTHOR_INTENT_URL";
+    public static final String AUTHOR_INTENT_NAME_TAG = "AUTHOR_INTENT_NAME";
     private static final String TAG = AuthorsActivity.class.getSimpleName();
     PoetsAdapter mAdapter;
     private RecyclerView mRecyclerView;
@@ -43,14 +47,24 @@ public class AuthorsActivity extends AppCompatActivity implements SearchView.OnQ
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-        ArrayList<String> list = new ArrayList<>();
+
+        final ArrayList<String> list = new ArrayList<>();
         list.addAll(map.keySet());
+        final HashMap<String, String> finalMap = map;
+
         mAdapter = new PoetsAdapter(list, new RecyclerItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
                 Toast.makeText(AuthorsActivity.this, "OnClick", Toast.LENGTH_SHORT).show();
+                Intent intentToPoemsListActivity = new Intent(AuthorsActivity.this, PoemsListActivity.class);
+                intentToPoemsListActivity.putExtra(AUTHOR_INTENT_URL_TAG,
+                        finalMap.get(((TextView) v.findViewById(R.id.text1)).getText().toString())
+                );
+                intentToPoemsListActivity.putExtra(AUTHOR_INTENT_NAME_TAG, list.get(position));
+                startActivity(intentToPoemsListActivity);
             }
         });
+
         mRecyclerView.setAdapter(mAdapter);
     }
 

@@ -28,7 +28,7 @@ class PoetsAdapter extends RecyclerView.Adapter<PoetsAdapter.ViewHolder> impleme
 
     @Override
     public PoetsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.poets_recycler_item, parent, false);
         final ViewHolder viewHolder = new ViewHolder(v);
         v.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,9 +60,9 @@ class PoetsAdapter extends RecyclerView.Adapter<PoetsAdapter.ViewHolder> impleme
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView text1;
+        TextView text1;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             text1 = (TextView) itemView.findViewById(R.id.text1);
         }
