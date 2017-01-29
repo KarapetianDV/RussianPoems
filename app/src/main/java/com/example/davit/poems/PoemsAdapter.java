@@ -33,6 +33,12 @@ public class PoemsAdapter extends RecyclerView.Adapter<PoemsAdapter.ViewHolder> 
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.poems_recycler_item, parent, false);
         final ViewHolder viewHolder = new ViewHolder(v);
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onItemClick(v, viewHolder.getAdapterPosition());
+            }
+        });
 
         return viewHolder;
     }

@@ -28,6 +28,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".AuthorsActivity" />
         </activity>
+        <activity android:name=".PoemActivity"></activity>
     </application>
 
 </manifest>

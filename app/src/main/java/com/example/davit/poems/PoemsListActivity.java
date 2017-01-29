@@ -9,10 +9,13 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -29,6 +32,9 @@ import static com.example.davit.poems.AuthorsActivity.AUTHOR_INTENT_URL_TAG;
 
 public class PoemsListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
+    static final String TEXT_INTENT_NAME_TAG = "TEXT_INTENT_NAME";
+    static final String TEXT_INTENT_URL_TAG = "TEXT_INTENT_URL";
+    static final String TEXT_INTENT_AUTHOR_TAG = "TEXT_INTENT_AUTHOR";
     private static final String TAG = PoemsListActivity.class.getSimpleName();
     PoemsAdapter mAdapter;
 
@@ -40,7 +46,7 @@ public class PoemsListActivity extends AppCompatActivity implements SearchView.O
         Intent intentFromAuthorsActivity = getIntent();
         String authorUrl = "http://klassika.ru" +
                 intentFromAuthorsActivity.getStringExtra(AUTHOR_INTENT_URL_TAG);
-        String authorName = intentFromAuthorsActivity.getStringExtra(AUTHOR_INTENT_NAME_TAG);
+        final String authorName = intentFromAuthorsActivity.getStringExtra(AUTHOR_INTENT_NAME_TAG);
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -66,14 +72,23 @@ public class PoemsListActivity extends AppCompatActivity implements SearchView.O
             e.printStackTrace();
         }
 
-        ArrayList<String> poemsList = new ArrayList<>(poemsMap.keySet());
+        final ArrayList<String> poemsList = new ArrayList<>(poemsMap.keySet());
 
+        final HashMap<String, String> finalPoemsMap = poemsMap;
         mAdapter = new PoemsAdapter(poemsList, authorName, new RecyclerItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-
+                Toast.makeText(PoemsListActivity.this, "Click", Toast.LENGTH_SHORT).show();
+                Intent intentToPoemActivity = new Intent(PoemsListActivity.this, PoemActivity.class);
+                intentToPoemActivity.putExtra(TEXT_INTENT_NAME_TAG,
+                        finalPoemsMap.get(((TextView) v.findViewById(R.id.poemName)).getText().toString()));
+                intentToPoemActivity.putExtra(TEXT_INTENT_URL_TAG,
+                        finalPoemsMap.get(poemsList.get(position)));
+                intentToPoemActivity.putExtra(TEXT_INTENT_AUTHOR_TAG, authorName);
+                startActivity(intentToPoemActivity);
             }
         });
+
         poemsRecyclerView.setAdapter(mAdapter);
     }
 
@@ -123,7 +138,9 @@ public class PoemsListActivity extends AppCompatActivity implements SearchView.O
             HashMap<String, String> map = new HashMap<>();
 
             for (Element element : authorsEl) {
-                map.put(element.text(), element.attr("href"));
+                map.put(element.text(), element.select("a").attr("href"));
+                Log.d(TAG, "doInBackground: " + "text: " + element.text() +
+                        " || herf: " + element.select("a").attr("href"));
             }
 
             return map;
