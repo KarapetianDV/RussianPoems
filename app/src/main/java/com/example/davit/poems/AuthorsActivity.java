@@ -1,6 +1,7 @@
 package com.example.davit.poems;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,12 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
@@ -71,9 +78,9 @@ public class AuthorsActivity extends AppCompatActivity implements SearchView.OnQ
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
+        inflater.inflate(R.menu.poets_activity_menu, menu);
 
-        MenuItem searchMenuItem = menu.findItem(R.id.search);
+        MenuItem searchMenuItem = menu.findItem(R.id.poetsSearch);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
         searchView.setOnQueryTextListener(this);
 
@@ -92,5 +99,31 @@ public class AuthorsActivity extends AppCompatActivity implements SearchView.OnQ
         mAdapter.getFilter().filter(newText);
 
         return true;
+    }
+
+    class AuthorParserTask extends AsyncTask<Void, Void, HashMap<String, String>> {
+
+        private Document doc;
+
+        @Override
+        protected HashMap<String, String> doInBackground(Void... params) {
+            try {
+                doc = Jsoup.connect("http://www.klassika.ru/stihi/").get();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Elements authorsEl = doc.select("#margins").select("a");
+            HashMap<String, String> map = new HashMap<>();
+
+            // Последние 5 элементов это меню
+            for (int i = 0; i < 105; i++) {
+                Element element = authorsEl.get(i);
+                if (element.text().length() > 1) {
+                    map.put(element.text(), element.attr("href"));
+                }
+            }
+
+            return map;
+        }
     }
 }
