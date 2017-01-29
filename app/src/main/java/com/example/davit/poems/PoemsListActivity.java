@@ -9,13 +9,10 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,6 +21,8 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
@@ -32,10 +31,11 @@ import static com.example.davit.poems.AuthorsActivity.AUTHOR_INTENT_URL_TAG;
 
 public class PoemsListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
-    static final String TEXT_INTENT_NAME_TAG = "TEXT_INTENT_NAME";
-    static final String TEXT_INTENT_URL_TAG = "TEXT_INTENT_URL";
-    static final String TEXT_INTENT_AUTHOR_TAG = "TEXT_INTENT_AUTHOR";
+    public static final String TEXT_INTENT_NAME_TAG = "TEXT_INTENT_NAME";
+    public static final String TEXT_INTENT_URL_TAG = "TEXT_INTENT_URL";
+    public static final String TEXT_INTENT_AUTHOR_TAG = "TEXT_INTENT_AUTHOR";
     private static final String TAG = PoemsListActivity.class.getSimpleName();
+
     PoemsAdapter mAdapter;
 
     @Override
@@ -74,14 +74,20 @@ public class PoemsListActivity extends AppCompatActivity implements SearchView.O
 
         final ArrayList<String> poemsList = new ArrayList<>(poemsMap.keySet());
 
+        Collections.sort(poemsList, new Comparator<String>() {
+            @Override
+            public int compare(String s1, String s2) {
+                return s1.compareTo(s2);
+            }
+        });
+
         final HashMap<String, String> finalPoemsMap = poemsMap;
         mAdapter = new PoemsAdapter(poemsList, authorName, new RecyclerItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                Toast.makeText(PoemsListActivity.this, "Click", Toast.LENGTH_SHORT).show();
                 Intent intentToPoemActivity = new Intent(PoemsListActivity.this, PoemActivity.class);
                 intentToPoemActivity.putExtra(TEXT_INTENT_NAME_TAG,
-                        finalPoemsMap.get(((TextView) v.findViewById(R.id.poemName)).getText().toString()));
+                        poemsList.get(position));
                 intentToPoemActivity.putExtra(TEXT_INTENT_URL_TAG,
                         finalPoemsMap.get(poemsList.get(position)));
                 intentToPoemActivity.putExtra(TEXT_INTENT_AUTHOR_TAG, authorName);
@@ -139,8 +145,6 @@ public class PoemsListActivity extends AppCompatActivity implements SearchView.O
 
             for (Element element : authorsEl) {
                 map.put(element.text(), element.select("a").attr("href"));
-                Log.d(TAG, "doInBackground: " + "text: " + element.text() +
-                        " || herf: " + element.select("a").attr("href"));
             }
 
             return map;

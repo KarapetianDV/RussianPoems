@@ -33,6 +33,8 @@ public class PoemActivity extends AppCompatActivity {
         String name = intent.getStringExtra(TEXT_INTENT_NAME_TAG);
         Log.d(TAG, "onCreate: " + name + " - " + authorName + " - " + URL);
 
+        setTitle(name);
+
         PoemTask task = new PoemTask();
         String text = new String();
         try {
@@ -42,8 +44,10 @@ public class PoemActivity extends AppCompatActivity {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        TextView textView = (TextView) findViewById(R.id.poemText);
-        textView.setText(text);
+        TextView poemText = (TextView) findViewById(R.id.poemText);
+        poemText.setText(text);
+        TextView authorText = (TextView) findViewById(R.id.authorText);
+        authorText.setText(authorName);
     }
 
     private class PoemTask extends AsyncTask<String, Void, String> {

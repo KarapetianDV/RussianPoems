@@ -14,7 +14,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -23,6 +22,8 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
@@ -31,6 +32,7 @@ public class AuthorsActivity extends AppCompatActivity implements SearchView.OnQ
     public static final String AUTHOR_INTENT_URL_TAG = "AUTHOR_INTENT_URL";
     public static final String AUTHOR_INTENT_NAME_TAG = "AUTHOR_INTENT_NAME";
     private static final String TAG = AuthorsActivity.class.getSimpleName();
+
     PoetsAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
@@ -59,14 +61,22 @@ public class AuthorsActivity extends AppCompatActivity implements SearchView.OnQ
         list.addAll(map.keySet());
         final HashMap<String, String> finalMap = map;
 
+        Collections.sort(list, new Comparator<String>() {
+            @Override
+            public int compare(String s1, String s2) {
+                return s1.compareTo(s2);
+            }
+        });
+
         mAdapter = new PoetsAdapter(list, new RecyclerItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                Toast.makeText(AuthorsActivity.this, "OnClick", Toast.LENGTH_SHORT).show();
-                Intent intentToPoemsListActivity = new Intent(AuthorsActivity.this, PoemsListActivity.class);
+                Intent intentToPoemsListActivity = new Intent(
+                        AuthorsActivity.this,
+                        PoemsListActivity.class);
+
                 intentToPoemsListActivity.putExtra(AUTHOR_INTENT_URL_TAG,
-                        finalMap.get(((TextView) v.findViewById(R.id.text1)).getText().toString())
-                );
+                        finalMap.get(((TextView) v.findViewById(R.id.text1)).getText().toString()));
                 intentToPoemsListActivity.putExtra(AUTHOR_INTENT_NAME_TAG, list.get(position));
                 startActivity(intentToPoemsListActivity);
             }
