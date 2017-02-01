@@ -27,11 +27,11 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
-public class AuthorsActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+public class AuthorsListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     public static final String AUTHOR_INTENT_URL_TAG = "AUTHOR_INTENT_URL";
     public static final String AUTHOR_INTENT_NAME_TAG = "AUTHOR_INTENT_NAME";
-    private static final String TAG = AuthorsActivity.class.getSimpleName();
+    private static final String TAG = AuthorsListActivity.class.getSimpleName();
 
     PoetsAdapter mAdapter;
     private RecyclerView mRecyclerView;
@@ -72,7 +72,7 @@ public class AuthorsActivity extends AppCompatActivity implements SearchView.OnQ
             @Override
             public void onItemClick(View v, int position) {
                 Intent intentToPoemsListActivity = new Intent(
-                        AuthorsActivity.this,
+                        AuthorsListActivity.this,
                         PoemsListActivity.class);
 
                 intentToPoemsListActivity.putExtra(AUTHOR_INTENT_URL_TAG,

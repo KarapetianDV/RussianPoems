@@ -1,6 +1,7 @@
 package com.example.davit.poems;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -26,8 +27,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
-import static com.example.davit.poems.AuthorsActivity.AUTHOR_INTENT_NAME_TAG;
-import static com.example.davit.poems.AuthorsActivity.AUTHOR_INTENT_URL_TAG;
+import static com.example.davit.poems.AuthorsListActivity.AUTHOR_INTENT_NAME_TAG;
+import static com.example.davit.poems.AuthorsListActivity.AUTHOR_INTENT_URL_TAG;
 
 public class PoemsListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
@@ -36,7 +37,10 @@ public class PoemsListActivity extends AppCompatActivity implements SearchView.O
     public static final String TEXT_INTENT_AUTHOR_TAG = "TEXT_INTENT_AUTHOR";
     private static final String TAG = PoemsListActivity.class.getSimpleName();
 
-    PoemsAdapter mAdapter;
+    private PoemsAdapter mAdapter;
+    private String authorUrl;
+    private String authorName;
+    private RecyclerView poemsRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,14 +48,16 @@ public class PoemsListActivity extends AppCompatActivity implements SearchView.O
         setContentView(R.layout.activity_poems_list);
 
         Intent intentFromAuthorsActivity = getIntent();
-        String authorUrl = "http://klassika.ru" +
+        authorUrl = "http://klassika.ru" +
                 intentFromAuthorsActivity.getStringExtra(AUTHOR_INTENT_URL_TAG);
-        final String authorName = intentFromAuthorsActivity.getStringExtra(AUTHOR_INTENT_NAME_TAG);
+        authorName = intentFromAuthorsActivity.getStringExtra(AUTHOR_INTENT_NAME_TAG);
 
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
-        RecyclerView poemsRecyclerView = (RecyclerView) findViewById(R.id.poemsRecyclerView);
+        poemsRecyclerView = (RecyclerView) findViewById(R.id.poemsRecyclerView);
         poemsRecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         poemsRecyclerView.setLayoutManager(layoutManager);
@@ -60,20 +66,28 @@ public class PoemsListActivity extends AppCompatActivity implements SearchView.O
                 layoutManager.getOrientation()
         ));
 
-        PoemsListParserTask poemsListParserTask = new PoemsListParserTask(authorUrl);
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // Для обработки нажатия кнопки назад в PoemActivity
+        if (getIntent().getStringExtra(AUTHOR_INTENT_URL_TAG) == null) {
+            authorUrl = getPreferences(MODE_PRIVATE).getString(AUTHOR_INTENT_URL_TAG, "");
+            authorName = getPreferences(MODE_PRIVATE).getString(AUTHOR_INTENT_NAME_TAG, "");
+        }
+
+        PoemsListParserTask poemsListParserTask = new PoemsListParserTask(authorUrl);
         HashMap<String, String> poemsMap = new HashMap<>();
 
         try {
             poemsMap = poemsListParserTask.execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
 
         final ArrayList<String> poemsList = new ArrayList<>(poemsMap.keySet());
-
         Collections.sort(poemsList, new Comparator<String>() {
             @Override
             public int compare(String s1, String s2) {
@@ -96,6 +110,16 @@ public class PoemsListActivity extends AppCompatActivity implements SearchView.O
         });
 
         poemsRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
+        editor.putString(AUTHOR_INTENT_URL_TAG, authorUrl);
+        editor.putString(AUTHOR_INTENT_NAME_TAG, authorName);
+        editor.apply();
     }
 
     @Override

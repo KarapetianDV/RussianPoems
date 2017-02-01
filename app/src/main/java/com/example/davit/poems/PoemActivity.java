@@ -28,25 +28,28 @@ public class PoemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_poem);
 
         Intent intent = getIntent();
-        String URL = intent.getStringExtra(TEXT_INTENT_URL_TAG);
+        String url = intent.getStringExtra(TEXT_INTENT_URL_TAG);
         String authorName = intent.getStringExtra(TEXT_INTENT_AUTHOR_TAG);
         String name = intent.getStringExtra(TEXT_INTENT_NAME_TAG);
-        Log.d(TAG, "onCreate: " + name + " - " + authorName + " - " + URL);
 
         setTitle(name);
 
-        PoemTask task = new PoemTask();
-        String text = new String();
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        String text = "";
         try {
-            text = task.execute("http://klassika.ru" + URL).get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+            text = new PoemTask().execute("http://klassika.ru" + url).get();
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+
         TextView poemText = (TextView) findViewById(R.id.poemText);
-        poemText.setText(text);
         TextView authorText = (TextView) findViewById(R.id.authorText);
+
+        poemText.setText(text);
         authorText.setText(authorName);
     }
 

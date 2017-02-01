@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AuthorsActivity">
+        <activity android:name=".AuthorsListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,12 +19,18 @@
         </activity>
         <activity
             android:name=".PoemsListActivity"
-            android:parentActivityName=".AuthorsActivity">
+            android:parentActivityName=".AuthorsListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".AuthorsActivity" />
+                android:value=".AuthorsListActivity" />
         </activity>
-        <activity android:name=".PoemActivity" />
+        <activity
+            android:name=".PoemActivity"
+            android:parentActivityName=".PoemsListActivity" />
+
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".PoemsListActivity" />
     </application>
 
 </manifest>
