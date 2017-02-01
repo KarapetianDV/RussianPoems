@@ -167,6 +167,8 @@ public class PoemsListActivity extends AppCompatActivity implements SearchView.O
             Elements authorsEl = doc.select("li");
             HashMap<String, String> map = new HashMap<>();
 
+            // Сам список произведений и URL к конкретному произведению
+
             for (Element element : authorsEl) {
                 map.put(element.text(), element.select("a").attr("href"));
             }

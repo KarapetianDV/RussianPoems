@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.TextView;
 
 import org.jsoup.Jsoup;
@@ -62,10 +61,11 @@ public class PoemActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             try {
                 doc = Jsoup.connect(params[0]).get();
-                Log.d(TAG, "doInBackground: " + params[0]);
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            // Тексты произведений
 
             Elements poemTextElements = doc.select("pre");
             result = poemTextElements.text();

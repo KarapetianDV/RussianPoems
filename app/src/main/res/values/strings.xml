@@ -2,4 +2,6 @@
     <string name="app_name">Русская классика</string>
     <string name="data_uploaded">Данные загружены</string>
     <string name="search_title">Поиск</string>
+    <string name="offline_text">В данный момент отсутствует соединение с сетью. Восстановите соединение и попробуйте снова.</string>
+    <string name="refresh_button_text">Обновить</string>
 </resources>
