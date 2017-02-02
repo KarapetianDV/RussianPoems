@@ -54,6 +54,10 @@ public class PoemsAdapter extends RecyclerView.Adapter<PoemsAdapter.ViewHolder> 
         return filteredList.size();
     }
 
+    public String getItem(int position) {
+        return filteredList.get(position);
+    }
+
     @Override
     public Filter getFilter() {
         if (poemsFilter == null)

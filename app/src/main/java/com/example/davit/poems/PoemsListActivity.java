@@ -101,9 +101,9 @@ public class PoemsListActivity extends AppCompatActivity implements SearchView.O
             public void onItemClick(View v, int position) {
                 Intent intentToPoemActivity = new Intent(PoemsListActivity.this, PoemActivity.class);
                 intentToPoemActivity.putExtra(TEXT_INTENT_NAME_TAG,
-                        poemsList.get(position));
+                        mAdapter.getItem(position));
                 intentToPoemActivity.putExtra(TEXT_INTENT_URL_TAG,
-                        finalPoemsMap.get(poemsList.get(position)));
+                        finalPoemsMap.get(mAdapter.getItem(position)));
                 intentToPoemActivity.putExtra(TEXT_INTENT_AUTHOR_TAG, authorName);
                 startActivity(intentToPoemActivity);
             }

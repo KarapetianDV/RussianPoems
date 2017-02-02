@@ -40,6 +40,10 @@ class PoetsAdapter extends RecyclerView.Adapter<PoetsAdapter.ViewHolder> impleme
         return viewHolder;
     }
 
+    public String getItem(int position) {
+        return filteredList.get(position);
+    }
+
     @Override
     public void onBindViewHolder(PoetsAdapter.ViewHolder holder, int position) {
         holder.text1.setText(filteredList.get(position));

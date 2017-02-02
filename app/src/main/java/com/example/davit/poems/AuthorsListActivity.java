@@ -16,7 +16,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.jsoup.Jsoup;
@@ -114,8 +113,8 @@ public class AuthorsListActivity extends AppCompatActivity implements SearchView
                         PoemsListActivity.class);
 
                 intentToPoemsListActivity.putExtra(AUTHOR_INTENT_URL_TAG,
-                        finalMap.get(((TextView) v.findViewById(R.id.text1)).getText().toString()));
-                intentToPoemsListActivity.putExtra(AUTHOR_INTENT_NAME_TAG, list.get(position));
+                        finalMap.get(mAdapter.getItem(position)));
+                intentToPoemsListActivity.putExtra(AUTHOR_INTENT_NAME_TAG, mAdapter.getItem(position));
                 startActivity(intentToPoemsListActivity);
             }
         });
