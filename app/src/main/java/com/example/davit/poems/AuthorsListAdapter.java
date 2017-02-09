@@ -11,14 +11,14 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 
-class PoetsAdapter extends RecyclerView.Adapter<PoetsAdapter.ViewHolder> implements Filterable {
+class AuthorsListAdapter extends RecyclerView.Adapter<AuthorsListAdapter.ViewHolder> implements Filterable {
 
     private ArrayList<String> poetsNames;
     private ArrayList<String> filteredList;
     private PoetsFilter poetsFilter;
     private RecyclerItemClickListener listener;
 
-    public PoetsAdapter(ArrayList<String> poetsNames, RecyclerItemClickListener listener) {
+    public AuthorsListAdapter(ArrayList<String> poetsNames, RecyclerItemClickListener listener) {
         this.poetsNames = poetsNames;
         this.filteredList = poetsNames;
         this.listener = listener;
@@ -27,8 +27,9 @@ class PoetsAdapter extends RecyclerView.Adapter<PoetsAdapter.ViewHolder> impleme
     }
 
     @Override
-    public PoetsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.poets_recycler_item, parent, false);
+    public AuthorsListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(
+                R.layout.poets_recycler_item, parent, false);
         final ViewHolder viewHolder = new ViewHolder(v);
         v.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,7 +46,7 @@ class PoetsAdapter extends RecyclerView.Adapter<PoetsAdapter.ViewHolder> impleme
     }
 
     @Override
-    public void onBindViewHolder(PoetsAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(AuthorsListAdapter.ViewHolder holder, int position) {
         holder.text1.setText(filteredList.get(position));
     }
 

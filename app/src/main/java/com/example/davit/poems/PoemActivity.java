@@ -1,25 +1,27 @@
 package com.example.davit.poems;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
+import com.example.davit.poems.data.PoemContract;
+import com.example.davit.poems.data.PoemsOpenHelper;
 
-import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 import static com.example.davit.poems.PoemsListActivity.TEXT_INTENT_AUTHOR_TAG;
 import static com.example.davit.poems.PoemsListActivity.TEXT_INTENT_NAME_TAG;
-import static com.example.davit.poems.PoemsListActivity.TEXT_INTENT_URL_TAG;
 
 public class PoemActivity extends AppCompatActivity {
 
     private static final String TAG = PoemActivity.class.getSimpleName();
+
+    private String name;
+    private String authorName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +29,8 @@ public class PoemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_poem);
 
         Intent intent = getIntent();
-        String url = intent.getStringExtra(TEXT_INTENT_URL_TAG);
-        String authorName = intent.getStringExtra(TEXT_INTENT_AUTHOR_TAG);
-        String name = intent.getStringExtra(TEXT_INTENT_NAME_TAG);
+        authorName = intent.getStringExtra(TEXT_INTENT_AUTHOR_TAG);
+        name = intent.getStringExtra(TEXT_INTENT_NAME_TAG);
 
         setTitle(name);
 
@@ -39,8 +40,13 @@ public class PoemActivity extends AppCompatActivity {
         }
 
         String text = "";
+
         try {
-            text = new PoemTask().execute("http://klassika.ru" + url).get();
+            Cursor cursor = new QueryForText().execute().get();
+            int columnIndex = cursor.getColumnIndex(PoemContract.PoemsEntry.COLUMN_TEXT);
+            cursor.moveToFirst();
+            text = (cursor.getString(columnIndex));
+            cursor.close();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
@@ -52,24 +58,27 @@ public class PoemActivity extends AppCompatActivity {
         authorText.setText(authorName);
     }
 
-    private class PoemTask extends AsyncTask<String, Void, String> {
-
-        Document doc;
-        String result;
+    private class QueryForText extends AsyncTask<Void, Void, Cursor> {
 
         @Override
-        protected String doInBackground(String... params) {
-            try {
-                doc = Jsoup.connect(params[0]).get();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        protected Cursor doInBackground(Void... params) {
+            PoemsOpenHelper helper = new PoemsOpenHelper(PoemActivity.this);
+            SQLiteDatabase db = helper.openDatabase();
 
-            // Тексты произведений
+            String selection = PoemContract.PoemsEntry.COLUMN_AUTHOR +
+                    " = '" + authorName + "' AND " + PoemContract.PoemsEntry.COLUMN_TITLE +
+                    " = '" + name + "'";
 
-            Elements poemTextElements = doc.select("pre");
-            result = poemTextElements.text();
-            return result;
+            Cursor c = db.query(
+                    PoemContract.PoemsEntry.TABLE_NAME,
+                    new String[]{PoemContract.PoemsEntry.COLUMN_TEXT},
+                    selection,
+                    null,
+                    null,
+                    null,
+                    null);
+
+            return c;
         }
     }
 }

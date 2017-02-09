@@ -10,9 +10,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class PoemsAdapter extends RecyclerView.Adapter<PoemsAdapter.ViewHolder> implements Filterable {
+public class PoemsListAdapter extends RecyclerView.Adapter<PoemsListAdapter.ViewHolder> implements Filterable {
 
-    private static final String TAG = PoemsAdapter.class.getSimpleName();
+    private static final String TAG = PoemsListAdapter.class.getSimpleName();
 
     private ArrayList<String> poemsNames;
     private String authorName;
@@ -20,7 +20,7 @@ public class PoemsAdapter extends RecyclerView.Adapter<PoemsAdapter.ViewHolder> 
     private RecyclerItemClickListener listener;
     private PoemsFilter poemsFilter;
 
-    public PoemsAdapter(ArrayList<String> poemsNames, String authorName, RecyclerItemClickListener listener) {
+    public PoemsListAdapter(ArrayList<String> poemsNames, String authorName, RecyclerItemClickListener listener) {
         this.poemsNames = poemsNames;
         this.filteredList = poemsNames;
         this.authorName = authorName;

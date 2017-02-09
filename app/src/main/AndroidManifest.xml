@@ -25,6 +25,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".AuthorsListActivity" />
         </activity>
+
         <activity
             android:name=".PoemActivity"
             android:parentActivityName=".PoemsListActivity" />
