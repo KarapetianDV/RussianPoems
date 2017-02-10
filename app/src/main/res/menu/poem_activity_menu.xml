@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_item_share"
+        android:actionProviderClass="android.widget.ShareActionProvider"
+        android:icon="@drawable/ic_share_white_24dp"
+        android:title="Поделиться"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/copyText"
+        android:icon="@drawable/ic_content_copy_white_24dp"
+        android:title="Скопировать текст стиха"
+        app:showAsAction="ifRoom" />
+
     <item
         android:id="@+id/incText"
         android:title="Увеличить размер шрифта"
         app:showAsAction="never" />
+
     <item
         android:id="@+id/decText"
         android:title="Уменьшить размер шрифта"
         app:showAsAction="never" />
-
-    <item
-        android:id="@+id/copyText"
-        android:icon="@drawable/ic_content_copy_black_24dp"
-        android:title="Скопировать текст стиха"
-        app:showAsAction="ifRoom" />
 </menu>

@@ -8,7 +8,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -41,6 +43,8 @@ public class PoemActivity extends AppCompatActivity {
     private String text;
 
     private SharedPreferences preferences;
+
+    private ShareActionProvider mShareActionProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +100,19 @@ public class PoemActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.poem_activity_menu, menu);
 
+        MenuItem item = menu.findItem(R.id.menu_item_share);
+
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+
         return true;
+    }
+
+    private void setShareIntent(Intent shareIntent) {
+        if (mShareActionProvider != null) {
+            mShareActionProvider.setShareIntent(shareIntent);
+        }
+
+        startActivity(Intent.createChooser(shareIntent, "Поделиться с помощью..."));
     }
 
     @Override
@@ -127,6 +143,16 @@ public class PoemActivity extends AppCompatActivity {
                 clipboardManager.setPrimaryClip(clipData);
 
                 Toast.makeText(this, "Текст скопирован в буфер обмена", Toast.LENGTH_SHORT).show();
+
+                return true;
+
+            case R.id.menu_item_share:
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_TEXT, text + "\n\n" + authorName);
+                intent.setType("text/plain");
+
+                setShareIntent(intent);
 
                 return true;
             default:
