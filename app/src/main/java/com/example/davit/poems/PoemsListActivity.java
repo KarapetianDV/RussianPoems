@@ -109,7 +109,7 @@ public class PoemsListActivity extends AppCompatActivity implements SearchView.O
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.poems_activity_menu, menu);
+        menuInflater.inflate(R.menu.poems_list_activity_menu, menu);
 
         MenuItem searchMenuItem = menu.findItem(R.id.poemsSearch);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);

@@ -25,7 +25,6 @@ import java.util.concurrent.ExecutionException;
 
 public class AuthorsListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
-    public static final String AUTHOR_INTENT_URL_TAG = "AUTHOR_INTENT_URL";
     public static final String AUTHOR_INTENT_NAME_TAG = "AUTHOR_INTENT_NAME";
     private static final String TAG = AuthorsListActivity.class.getSimpleName();
 
@@ -78,7 +77,7 @@ public class AuthorsListActivity extends AppCompatActivity implements SearchView
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.poets_activity_menu, menu);
+        inflater.inflate(R.menu.poets_list_activity_menu, menu);
 
         MenuItem searchMenuItem = menu.findItem(R.id.poetsSearch);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
