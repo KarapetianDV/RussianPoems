@@ -9,4 +9,10 @@
         android:id="@+id/decText"
         android:title="Уменьшить размер шрифта"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/copyText"
+        android:icon="@drawable/ic_content_copy_black_24dp"
+        android:title="Скопировать текст стиха"
+        app:showAsAction="ifRoom" />
 </menu>

@@ -1,5 +1,7 @@
 package com.example.davit.poems;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -13,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.davit.poems.data.PoemContract;
 import com.example.davit.poems.data.PoemsOpenHelper;
@@ -35,6 +38,8 @@ public class PoemActivity extends AppCompatActivity {
 
     private float poemTextSize = 14;
 
+    private String text;
+
     private SharedPreferences preferences;
 
     @Override
@@ -52,8 +57,6 @@ public class PoemActivity extends AppCompatActivity {
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
-        String text = "";
 
         try {
             Cursor cursor = new QueryForText().execute().get();
@@ -115,6 +118,15 @@ public class PoemActivity extends AppCompatActivity {
                 editor.apply();
 
                 Log.d(TAG, "onOptionsItemSelected: poemTextSize уменьшили и записали - " + poemTextSize);
+
+                return true;
+
+            case R.id.copyText:
+                ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                ClipData clipData = ClipData.newPlainText("текст стиха", text);
+                clipboardManager.setPrimaryClip(clipData);
+
+                Toast.makeText(this, "Текст скопирован в буфер обмена", Toast.LENGTH_SHORT).show();
 
                 return true;
             default:
