@@ -29,12 +29,10 @@ import static com.example.davit.poems.PoemsListActivity.TEXT_INTENT_NAME_TAG;
 
 public class PoemActivity extends AppCompatActivity {
 
+    public static final String TEXT_SIZE_CONST = "TEXT_SIZE_CONST";
     private static final String TAG = PoemActivity.class.getSimpleName();
-
     private String name;
     private String authorName;
-    private String TEXT_SIZE_CONST = "TEXT_SIZE_CONST";
-
     private TextView poemText;
     private TextView authorText;
 
@@ -52,6 +50,8 @@ public class PoemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_poem);
 
         Intent intent = getIntent();
+
+        // Получаем название стиха и автора
         authorName = intent.getStringExtra(TEXT_INTENT_AUTHOR_TAG);
         name = intent.getStringExtra(TEXT_INTENT_NAME_TAG);
 
@@ -62,6 +62,7 @@ public class PoemActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        // Грузим текст стиха из базы
         try {
             Cursor cursor = new QueryForText().execute().get();
             int columnIndex = cursor.getColumnIndex(PoemContract.PoemsEntry.COLUMN_TEXT);
@@ -82,6 +83,8 @@ public class PoemActivity extends AppCompatActivity {
         authorText.setText(authorName);
     }
 
+    // Регулируем размер текста стиха, если существует в preferences то грузим оттуда
+    // Иначе, пишем в preferences стандартное значение
     private void initTextSize() {
         if (preferences.contains(TEXT_SIZE_CONST)) {
             poemTextSize = preferences.getFloat(TEXT_SIZE_CONST, 14);
@@ -112,7 +115,7 @@ public class PoemActivity extends AppCompatActivity {
             mShareActionProvider.setShareIntent(shareIntent);
         }
 
-        startActivity(Intent.createChooser(shareIntent, "Поделиться с помощью..."));
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_with)));
     }
 
     @Override
@@ -139,10 +142,10 @@ public class PoemActivity extends AppCompatActivity {
 
             case R.id.copyText:
                 ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                ClipData clipData = ClipData.newPlainText("текст стиха", text);
+                ClipData clipData = ClipData.newPlainText("poem text", text);
                 clipboardManager.setPrimaryClip(clipData);
 
-                Toast.makeText(this, "Текст скопирован в буфер обмена", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.text_copy_to_clipboard, Toast.LENGTH_SHORT).show();
 
                 return true;
 

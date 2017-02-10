@@ -11,7 +11,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,7 +28,9 @@ public class AuthorsListActivity extends AppCompatActivity implements SearchView
     private static final String TAG = AuthorsListActivity.class.getSimpleName();
 
     private AuthorsListAdapter authorsListAdapter;
-    private RecyclerView mRecyclerView;
+    private RecyclerView authorsRecyclerView;
+
+    private ArrayList<String> authorsList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,16 +38,15 @@ public class AuthorsListActivity extends AppCompatActivity implements SearchView
 
         setContentView(R.layout.activity_authors);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        mRecyclerView.setHasFixedSize(true);
+        authorsRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        authorsRecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(
-                mRecyclerView.getContext(),
+        authorsRecyclerView.setLayoutManager(layoutManager);
+        authorsRecyclerView.addItemDecoration(new DividerItemDecoration(
+                authorsRecyclerView.getContext(),
                 layoutManager.getOrientation()));
 
-        ArrayList<String> authorsList = new ArrayList<>();
-
+        // Заполняем list авторов из базы данных
         try {
             Cursor cursor = new QueryForAuthorList().execute().get();
             int columnIndex = cursor.getColumnIndex(PoemContract.PoemsEntry.COLUMN_AUTHOR);
@@ -66,12 +66,11 @@ public class AuthorsListActivity extends AppCompatActivity implements SearchView
                         PoemsListActivity.class);
 
                 intentToPoemsListActivity.putExtra(AUTHOR_INTENT_NAME_TAG, authorsListAdapter.getItem(position));
-                Log.d(TAG, "onItemClick: " + authorsListAdapter.getItem(position));
                 startActivity(intentToPoemsListActivity);
             }
         });
 
-        mRecyclerView.setAdapter(authorsListAdapter);
+        authorsRecyclerView.setAdapter(authorsListAdapter);
     }
 
     @Override

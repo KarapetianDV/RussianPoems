@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Русская классика</string>
     <string name="search_title">Поиск</string>
+    <string name="share_with">Поделиться с помощью…</string>
+    <string name="text_copy_to_clipboard">Текст скопирован в буфер обмена</string>
 </resources>
