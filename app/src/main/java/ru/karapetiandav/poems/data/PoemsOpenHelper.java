@@ -1,4 +1,4 @@
-package com.example.davit.poems.data;
+package ru.karapetiandav.poems.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

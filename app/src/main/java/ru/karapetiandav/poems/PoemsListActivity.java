@@ -1,4 +1,4 @@
-package com.example.davit.poems;
+package ru.karapetiandav.poems;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,13 +19,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.example.davit.poems.data.PoemContract;
-import com.example.davit.poems.data.PoemsOpenHelper;
-
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-import static com.example.davit.poems.AuthorsListActivity.AUTHOR_INTENT_NAME_TAG;
+import ru.karapetiandav.poems.data.PoemContract;
+import ru.karapetiandav.poems.data.PoemsOpenHelper;
 
 public class PoemsListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
@@ -42,16 +40,16 @@ public class PoemsListActivity extends AppCompatActivity implements SearchView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_poems_list);
 
-        if (getIntent().getStringExtra(AUTHOR_INTENT_NAME_TAG) == null) {
-            authorName = getPreferences(MODE_PRIVATE).getString(AUTHOR_INTENT_NAME_TAG, "");
+        if (getIntent().getStringExtra(AuthorsListActivity.AUTHOR_INTENT_NAME_TAG) == null) {
+            authorName = getPreferences(MODE_PRIVATE).getString(AuthorsListActivity.AUTHOR_INTENT_NAME_TAG, "");
 
             Log.d(TAG, "onCreate: Считали с SharedPreferences и теперь authorName - " + authorName);
 
             SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
-            editor.remove(AUTHOR_INTENT_NAME_TAG);
+            editor.remove(AuthorsListActivity.AUTHOR_INTENT_NAME_TAG);
             editor.apply();
         } else {
-            authorName = getIntent().getStringExtra(AUTHOR_INTENT_NAME_TAG);
+            authorName = getIntent().getStringExtra(AuthorsListActivity.AUTHOR_INTENT_NAME_TAG);
             Log.d(TAG, "onCreate: Получили с Intent и теперь authorName - " + authorName);
         }
 
@@ -101,7 +99,7 @@ public class PoemsListActivity extends AppCompatActivity implements SearchView.O
         super.onStop();
 
         SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
-        editor.putString(AUTHOR_INTENT_NAME_TAG, authorName);
+        editor.putString(AuthorsListActivity.AUTHOR_INTENT_NAME_TAG, authorName);
         editor.apply();
         Log.d(TAG, "onStop: записали в SharedPreferences");
     }

@@ -1,4 +1,4 @@
-package com.example.davit.poems;
+package ru.karapetiandav.poems;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -19,13 +19,13 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.davit.poems.data.PoemContract;
-import com.example.davit.poems.data.PoemsOpenHelper;
-
 import java.util.concurrent.ExecutionException;
 
-import static com.example.davit.poems.PoemsListActivity.TEXT_INTENT_AUTHOR_TAG;
-import static com.example.davit.poems.PoemsListActivity.TEXT_INTENT_NAME_TAG;
+import ru.karapetiandav.poems.data.PoemContract;
+import ru.karapetiandav.poems.data.PoemsOpenHelper;
+
+import static ru.karapetiandav.poems.PoemsListActivity.TEXT_INTENT_AUTHOR_TAG;
+import static ru.karapetiandav.poems.PoemsListActivity.TEXT_INTENT_NAME_TAG;
 
 public class PoemActivity extends AppCompatActivity {
 

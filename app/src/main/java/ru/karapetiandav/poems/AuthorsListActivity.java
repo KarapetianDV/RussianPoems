@@ -1,4 +1,4 @@
-package com.example.davit.poems;
+package ru.karapetiandav.poems;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -16,11 +16,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.example.davit.poems.data.PoemContract;
-import com.example.davit.poems.data.PoemsOpenHelper;
-
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
+
+import ru.karapetiandav.poems.data.PoemContract;
+import ru.karapetiandav.poems.data.PoemsOpenHelper;
 
 public class AuthorsListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 

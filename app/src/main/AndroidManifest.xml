@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.davit.poems">
+    package="ru.karapetiandav.poems">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -11,7 +11,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AuthorsListActivity">
+        <activity android:name="ru.karapetiandav.poems.AuthorsListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,20 +19,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PoemsListActivity"
-            android:parentActivityName=".AuthorsListActivity">
+            android:name="ru.karapetiandav.poems.PoemsListActivity"
+            android:parentActivityName="ru.karapetiandav.poems.AuthorsListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".AuthorsListActivity" />
+                android:value="ru.karapetiandav.poems.AuthorsListActivity" />
         </activity>
 
         <activity
-            android:name=".PoemActivity"
-            android:parentActivityName=".PoemsListActivity" />
+            android:name="ru.karapetiandav.poems.PoemActivity"
+            android:parentActivityName="ru.karapetiandav.poems.PoemsListActivity" />
 
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
-            android:value=".PoemsListActivity" />
+            android:value="ru.karapetiandav.poems.PoemsListActivity" />
     </application>
 
 </manifest>

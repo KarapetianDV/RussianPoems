@@ -1,4 +1,4 @@
-package com.example.davit.poems;
+package ru.karapetiandav.poems;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,28 +10,26 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class PoemsListAdapter extends RecyclerView.Adapter<PoemsListAdapter.ViewHolder> implements Filterable {
 
-    private static final String TAG = PoemsListAdapter.class.getSimpleName();
+class AuthorsListAdapter extends RecyclerView.Adapter<AuthorsListAdapter.ViewHolder> implements Filterable {
 
-    private ArrayList<String> poemsNames;
-    private String authorName;
+    private ArrayList<String> poetsNames;
     private ArrayList<String> filteredList;
+    private PoetsFilter poetsFilter;
     private RecyclerItemClickListener listener;
-    private PoemsFilter poemsFilter;
 
-    public PoemsListAdapter(ArrayList<String> poemsNames, String authorName, RecyclerItemClickListener listener) {
-        this.poemsNames = poemsNames;
-        this.filteredList = poemsNames;
-        this.authorName = authorName;
+    public AuthorsListAdapter(ArrayList<String> poetsNames, RecyclerItemClickListener listener) {
+        this.poetsNames = poetsNames;
+        this.filteredList = poetsNames;
         this.listener = listener;
 
         getFilter();
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.poems_recycler_item, parent, false);
+    public AuthorsListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(
+                R.layout.poets_recycler_item, parent, false);
         final ViewHolder viewHolder = new ViewHolder(v);
         v.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,10 +41,13 @@ public class PoemsListAdapter extends RecyclerView.Adapter<PoemsListAdapter.View
         return viewHolder;
     }
 
+    public String getItem(int position) {
+        return filteredList.get(position);
+    }
+
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.poemName.setText(filteredList.get(position));
-        holder.poemAuthor.setText(authorName);
+    public void onBindViewHolder(AuthorsListAdapter.ViewHolder holder, int position) {
+        holder.text1.setText(filteredList.get(position));
     }
 
     @Override
@@ -54,31 +55,25 @@ public class PoemsListAdapter extends RecyclerView.Adapter<PoemsListAdapter.View
         return filteredList.size();
     }
 
-    public String getItem(int position) {
-        return filteredList.get(position);
-    }
-
     @Override
     public Filter getFilter() {
-        if (poemsFilter == null)
-            poemsFilter = new PoemsFilter();
+        if (poetsFilter == null)
+            poetsFilter = new PoetsFilter();
 
-        return poemsFilter;
+        return poetsFilter;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView poemName;
-        TextView poemAuthor;
+        TextView text1;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
-            poemName = (TextView) itemView.findViewById(R.id.poemName);
-            poemAuthor = (TextView) itemView.findViewById(R.id.poemAuthor);
+            text1 = (TextView) itemView.findViewById(R.id.text1);
         }
     }
 
-    private class PoemsFilter extends Filter {
+    private class PoetsFilter extends Filter {
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
@@ -87,7 +82,7 @@ public class PoemsListAdapter extends RecyclerView.Adapter<PoemsListAdapter.View
             if (constraint != null && constraint.length() > 0) {
                 ArrayList<String> tempList = new ArrayList<>();
 
-                for (String poet : poemsNames) {
+                for (String poet : poetsNames) {
                     if (poet.toLowerCase().contains(constraint.toString().toLowerCase()))
                         tempList.add(poet);
                 }
@@ -95,8 +90,8 @@ public class PoemsListAdapter extends RecyclerView.Adapter<PoemsListAdapter.View
                 results.values = tempList;
                 results.count = tempList.size();
             } else {
-                results.values = poemsNames;
-                results.count = poemsNames.size();
+                results.values = poetsNames;
+                results.count = poetsNames.size();
             }
 
             return results;
